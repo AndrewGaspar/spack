@@ -6,7 +6,7 @@
 from spack import *
 from shutil import copyfile
 
-class Mrustc(MakefilePackage):
+class Mrustc(Package):
     "mrustc is a minimal C++ implementation of the Rust toolchain"
 
     homepage = "https://github.com/thepowersgang/mrustc"
@@ -21,17 +21,13 @@ class Mrustc(MakefilePackage):
     variant('minicargo', default=True, description='Builds minicargo, a limited version of cargo')
     variant('mrustc', default=True, description='Builds mrustc, a limited version of rustc')
 
-    def build(self, spec, prefix):
-        if '+mrustc' in self.spec:
-            make('bin/mrustc')
-
-        if '+minicargo' in self.spec:
-            make('-f', 'minicargo.mk', 'tools/bin/minicargo')
-
     def install(self, spec, prefix):
         mkdirp(prefix.bin)
+
         if '+mrustc' in self.spec:
+            make('bin/mrustc')
             install('bin/mrustc', prefix.bin)
 
         if '+minicargo' in self.spec:
+            make('-f', 'minicargo.mk', 'tools/bin/minicargo')
             install('tools/bin/minicargo', prefix.bin)
