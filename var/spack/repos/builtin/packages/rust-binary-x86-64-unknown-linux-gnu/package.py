@@ -13,8 +13,6 @@ class RustBinaryX8664UnknownLinuxGnu(RustBinaryPackage):
 
     maintainers = ['AndrewGaspar']
 
-    # provides('rust-binary', when='platform=linux os=rhel7 target=x86_64')
-
     rust_target_arch = 'x86_64-unknown-linux-gnu'
 
     version('1.41.1', sha256='a6d5a3b3f574aafc8f787fea37aad9fb8a7946b383ae5348146927192ff0bef0')
