@@ -13,7 +13,7 @@ class RustBinaryX8664AppleDarwin(RustBinaryPackage):
 
     maintainers = ['AndrewGaspar']
 
-    provides('rust-binary', when='platform=darwin os=catalina target=x86_64')
+    # provides('rust-binary', when='platform=darwin os=catalina target=x86_64')
 
     rust_target_arch = 'x86_64-apple-darwin'
 
