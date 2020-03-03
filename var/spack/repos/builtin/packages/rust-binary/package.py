@@ -13,7 +13,7 @@ class RustBinary(Package):
 
     homepage = "https://www.rust-lang.org"
     # This release tar isn't actually even used, but we need something to
-    # create a package with unique versions
+    # create unique hashes for each version
     url = "https://github.com/rust-lang/rust/archive/1.41.1.tar.gz"
 
     maintainers = ['AndrewGaspar']
