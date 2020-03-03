@@ -25,6 +25,8 @@ class RustBinary(Package):
             dep = 'rust-binary-powerpc64le-unknown-linux-gnu'
         elif self.spec.satisfies('platform=darwin target=x86_64:'):
             dep = 'rust-binary-x86-64-apple-darwin'
+        else:
+            raise InstallError("rust-binary is not supported for '%s'" % self.spec.architecture)
 
         install_tree(spec[dep].prefix.bin, prefix.bin)
         install_tree(spec[dep].prefix.etc, prefix.etc)
