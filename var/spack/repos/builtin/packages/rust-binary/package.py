@@ -19,7 +19,7 @@ class RustBinary(Package):
     maintainers = ['AndrewGaspar']
 
     def install(self, spec, prefix):
-        if self.spec.satisfies('platform=linux target=x86_64:'):
+        if self.spec.satisfies('platform=linux target=x86_64:') or self.spec.satisfies('platform=cray target=x86_64:'):
             dep = 'rust-binary-x86-64-unknown-linux-gnu'
         if self.spec.satisfies('platform=linux target=ppc64le:'):
             dep = 'rust-binary-powerpc64le-unknown-linux-gnu'
@@ -102,5 +102,7 @@ class RustBinary(Package):
         # rust-compiler provides a specific version of the _compiler_.
         provides('rust-compiler@%s' % ver, when="@%s" % ver)
         depends_on('rust-binary-x86-64-unknown-linux-gnu@%s' % ver, when='@%s platform=linux target=x86_64:' % ver, type='build')
+        depends_on('rust-binary-x86-64-unknown-linux-gnu@%s' % ver, when='@%s platform=cray target=x86_64:' % ver, type='build')
         depends_on('rust-binary-powerpc64le-unknown-linux-gnu@%s' % ver, when='@%s platform=linux target=ppc64le:' % ver, type='build')
+        depends_on('rust-binary-powerpc64le-unknown-linux-gnu@%s' % ver, when='@%s platform=cray target=ppc64le:' % ver, type='build')
         depends_on('rust-binary-x86-64-apple-darwin@%s' % ver, when='@%s platform=darwin target=x86_64:' % ver, type='build')
