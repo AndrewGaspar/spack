@@ -22,12 +22,14 @@ class Mrustc(Package):
     variant('mrustc', default=True, description='Builds mrustc, a limited version of rustc')
 
     def install(self, spec, prefix):
-        mkdirp(prefix.bin)
-
         if '+mrustc' in self.spec:
             make('bin/mrustc')
+            mkdirp(prefix.bin)
             install('bin/mrustc', prefix.bin)
 
         if '+minicargo' in self.spec:
             make('-f', 'minicargo.mk', 'tools/bin/minicargo')
-            install('tools/bin/minicargo', prefix.bin)
+            mkdirp(prefix.tools.bin)
+            install('tools/bin/minicargo', prefix.tools.bin)
+            mkdirp(prefix.share)
+            install('minicargo.mk', prefix.share)
