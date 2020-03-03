@@ -21,6 +21,8 @@ class RustBinary(Package):
     def install(self, spec, prefix):
         if self.spec.satisfies('platform=linux target=x86_64:'):
             dep = 'rust-binary-x86-64-unknown-linux-gnu'
+        if self.spec.satisfies('platform=linux target=powerpc64le:'):
+            dep = 'rust-binary-powerpc64le-unknown-linux-gnu'
         elif self.spec.satisfies('platform=darwin target=x86_64:'):
             dep = 'rust-binary-x86-64-apple-darwin'
 
@@ -90,13 +92,15 @@ class RustBinary(Package):
 
     for ver, hash in releases:
         version(ver, sha256=hash)
-        # rust-lang provides a specific version of the language. E.g., rust
-        # version 1.41.0 can provide support for every version of the language
-        # up through 1.41.
+        # rust-lang provides a specific version of the _language_. New versions
+        # of the compiler can provide old versions of the language. E.g., rust
+        # version 1.41.0 provides support for every version of the language up
+        # through 1.41.
         #
         # We assume minor versions don't introduce language changes.
         provides('rust-lang@:%s' % Version(ver).up_to(2), when="@%s" % ver)
-        # rust-compiler provides a specific version of the compiler.
+        # rust-compiler provides a specific version of the _compiler_.
         provides('rust-compiler@%s' % ver, when="@%s" % ver)
         depends_on('rust-binary-x86-64-unknown-linux-gnu@%s' % ver, when='@%s platform=linux target=x86_64:' % ver, type='build')
+        depends_on('rust-binary-powerpc64le-unknown-linux-gnu@%s' % ver, when='@%s platform=linux target=ppc64le:' % ver, type='build')
         depends_on('rust-binary-x86-64-apple-darwin@%s' % ver, when='@%s platform=darwin target=x86_64:' % ver, type='build')
