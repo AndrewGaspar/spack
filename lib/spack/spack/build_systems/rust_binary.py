@@ -6,6 +6,7 @@
 from spack.package import PackageBase
 from spack.util.executable import Executable
 
+
 class RustBinaryPackage(PackageBase):
     """Specialized class for rust binary distributions.
 
@@ -17,7 +18,7 @@ class RustBinaryPackage(PackageBase):
 
     # Only need an install phase
     phases = ['install']
-    
+
     #: This attribute is used in UI queries that need to know the build
     #: system base class
     build_system_class = 'RustBinaryPackage'

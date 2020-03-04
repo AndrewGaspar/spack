@@ -4,7 +4,6 @@
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 from spack import *
-from spack.patch import FilePatch
 
 
 class RustBootstrap129(Package):
@@ -42,10 +41,14 @@ class RustBootstrap129(Package):
             'RUSTCSRC=./',
             'RUSTC_VERSION=1.29.0',
             'MRUSTC=%s' % join_path(spec['mrustc'].prefix.bin, 'mrustc'),
-            'MINICARGO=%s' % join_path(spec['mrustc'].prefix.tools.bin, 'minicargo'),
-            'OVERRIDE_DIR=%s' % join_path(spec['mrustc'].prefix, 'script-overrides/stable-1.29.0-linux/'),
+            'MINICARGO=%s'
+            % join_path(spec['mrustc'].prefix.tools.bin, 'minicargo'),
+            'OVERRIDE_DIR=%s'
+            % join_path(
+                spec['mrustc'].prefix,
+                'script-overrides/stable-1.29.0-linux/'),
             'output/cargo',
-            extra_env = {
+            extra_env={
                 # vendored libgit2 wasn't correctly building (couldn't find the
                 # vendored libssh2), so let's just have spack build it
                 'LIBSSH2_SYS_USE_PKG_CONFIG': '1',
@@ -58,13 +61,18 @@ class RustBootstrap129(Package):
             'RUSTCSRC=./',
             'RUSTC_VERSION=1.29.0',
             'MRUSTC=%s' % join_path(spec['mrustc'].prefix.bin, 'mrustc'),
-            'MINICARGO=%s' % join_path(spec['mrustc'].prefix.tools.bin, 'minicargo'),
-            'OVERRIDE_DIR=%s' % join_path(spec['mrustc'].prefix, 'script-overrides/stable-1.29.0-linux/'),
+            'MINICARGO=%s'
+            % join_path(spec['mrustc'].prefix.tools.bin, 'minicargo'),
+            'OVERRIDE_DIR=%s'
+            % join_path(
+                spec['mrustc'].prefix,
+                'script-overrides/stable-1.29.0-linux/'),
             'output/rustc',
             'output/cargo'
         )
 
-        # FIXME: This needs to self-bootstrap to a Rust 1.29 compiler built with 1.29
+        # FIXME: This needs to self-bootstrap to a Rust 1.29 compiler built
+        # with 1.29
         mkdirp(prefix.bin)
         install('output/rustc', prefix.bin)
         install('output/cargo', prefix.bin)

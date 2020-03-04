@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
 from spack import *
-from shutil import copyfile
+
 
 class Mrustc(Package):
     "mrustc is a minimal C++ implementation of the Rust toolchain"
