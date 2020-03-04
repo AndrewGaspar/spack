@@ -39,6 +39,8 @@ packages:
       opencl: [pocl]
       pil: [py-pillow]
       pkgconfig: [pkgconf, pkg-config]
+      rust-compiler: [rust-binary, rust-bootstrap]
+      rust-lang: [rust-binary, rust-bootstrap]
       scalapack: [netlib-scalapack]
       szip: [libszip, libaec]
       tbb: [intel-tbb]
