@@ -40,7 +40,7 @@ class RustBootstrap(Package):
         boot_bin = spec['rust-binary'].prefix.bin
 
         with open('config.toml', 'w') as out_file:
-            out_file.write("""
+            out_file.write("""\
 [build]
 cargo = '{cargo}'
 rustc = '{rustc}'
@@ -53,20 +53,19 @@ channel = stable
 
 [install]
 prefix = '{prefix}'
-""".format(cargo=boot_bin.cargo, rustc=boot_bin.rustc, prefix=prefix)
+""".format(cargo=boot_bin.cargo, rustc=boot_bin.rustc, prefix=prefix))
 
     def build(self, spec, prefix):
         x_py = Executable('./x.py')
-        x_py('build',
-            extra_env = {
+        x_py(
+            'build',
+            extra_env={
                 # vendored libgit2 wasn't correctly building (couldn't find the
                 # vendored libssh2), so let's just have spack build it
                 'LIBSSH2_SYS_USE_PKG_CONFIG': '1',
                 'LIBGIT2_SYS_USE_PKG_CONFIG': '1'
             })
 
-
     def install(self, spec, prefix):
         x_py = Executable('./x.py')
         x_py('install')
-
