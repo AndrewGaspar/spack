@@ -97,18 +97,25 @@ class RustBootstrap(Package):
         with open('config.toml', 'w') as out_file:
             out_file.write("""\
 [build]
-cargo = '{cargo}'
-rustc = '{rustc}'
+cargo = "{cargo}"
+rustc = "{rustc}"
 docs = false
 vendor = true
 extended = true
 
 [rust]
-channel = stable
+channel = "stable"
+
+[target.x86_64-unknown-linux-gnu]
+ar = "{ar}"
 
 [install]
-prefix = '{prefix}'
-""".format(cargo=boot_bin.cargo, rustc=boot_bin.rustc, prefix=prefix))
+prefix = "{prefix}"
+""".format(
+    cargo=boot_bin.cargo,
+    rustc=boot_bin.rustc,
+    prefix=prefix,
+    ar=spec['binutils'].prefix.bin.ar))
 
     def build(self, spec, prefix):
         x_py = Executable('./x.py')
