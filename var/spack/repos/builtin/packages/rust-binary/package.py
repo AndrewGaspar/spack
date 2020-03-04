@@ -22,7 +22,7 @@ class RustBinary(Package):
         if self.spec.satisfies('platform=linux target=x86_64:') or \
            self.spec.satisfies('platform=cray target=x86_64:'):
             dep = 'rust-binary-x86-64-unknown-linux-gnu'
-        if self.spec.satisfies('platform=linux target=ppc64le:'):
+        elif self.spec.satisfies('platform=linux target=ppc64le:'):
             dep = 'rust-binary-powerpc64le-unknown-linux-gnu'
         elif self.spec.satisfies('platform=darwin target=x86_64:'):
             dep = 'rust-binary-x86-64-apple-darwin'
