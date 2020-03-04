@@ -3,24 +3,8 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-# ----------------------------------------------------------------------------
-# If you submit this package back to Spack as a pull request,
-# please first remove this boilerplate and all FIXME comments.
-#
-# This is a template package file for Spack.  We've put "FIXME"
-# next to all the things you'll want to change. Once you've handled
-# them, you can save this file and test your package like this:
-#
-#     spack install rust-bootstrap-1-29
-#
-# You can edit this file again by typing:
-#
-#     spack edit rust-bootstrap-1-29
-#
-# See the Spack documentation for more information on packaging.
-# ----------------------------------------------------------------------------
-
 from spack import *
+from spack.patch import FilePatch
 
 
 class RustBootstrap129(Package):
@@ -38,14 +22,43 @@ class RustBootstrap129(Package):
     depends_on('python@:2.8', type='build')
     depends_on('mrustc +mrustc +minicargo', type='build')
     depends_on('openssl')
+    depends_on('libssh2')
+    depends_on('libgit2')
 
     def install(self, spec, prefix):
+        # Emplace the lib/librustc_macro re-implementation from mrustc
+        mkdirp('lib')
+        install_tree(spec['mrustc'].prefix.lib, 'lib')
+
+        # Apply the source patch
+        patch = which("patch", required=True)
+        patch(
+            '-s',
+            '-p0',
+            '-i', join_path(spec['mrustc'].prefix, 'rustc-1.29.0-src.patch'))
+
         make(
             '-f', join_path(spec['mrustc'].prefix.share, 'minicargo.mk'),
             'RUSTCSRC=./',
             'RUSTC_VERSION=1.29.0',
             'MRUSTC=%s' % join_path(spec['mrustc'].prefix.bin, 'mrustc'),
             'MINICARGO=%s' % join_path(spec['mrustc'].prefix.tools.bin, 'minicargo'),
+            'OVERRIDE_DIR=%s' % join_path(spec['mrustc'].prefix, 'script-overrides/stable-1.29.0-linux/'),
+            'output/cargo',
+            extra_env = {
+                # libgit2 wasn't correctly
+                'LIBSSH2_SYS_USE_PKG_CONFIG': '1',
+                'LIBGIT2_SYS_USE_PKG_CONFIG': '1'
+            }
+        )
+
+        make(
+            '-f', join_path(spec['mrustc'].prefix.share, 'minicargo.mk'),
+            'RUSTCSRC=./',
+            'RUSTC_VERSION=1.29.0',
+            'MRUSTC=%s' % join_path(spec['mrustc'].prefix.bin, 'mrustc'),
+            'MINICARGO=%s' % join_path(spec['mrustc'].prefix.tools.bin, 'minicargo'),
+            'OVERRIDE_DIR=%s' % join_path(spec['mrustc'].prefix, 'script-overrides/stable-1.29.0-linux/'),
             'output/rustc',
             'output/cargo'
         )

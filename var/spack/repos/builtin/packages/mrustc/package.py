@@ -33,3 +33,7 @@ class Mrustc(Package):
             install('tools/bin/minicargo', prefix.tools.bin)
             mkdirp(prefix.share)
             install('minicargo.mk', prefix.share)
+
+        install_tree('script-overrides', join_path(prefix, 'script-overrides'))
+        install_tree('lib', prefix.lib)
+        install('rustc-1.29.0-src.patch', prefix)
