@@ -59,7 +59,8 @@ prefix = '{prefix}'
         x_py = Executable('./x.py')
         x_py('build',
             extra_env = {
-                # libgit2 wasn't correctly
+                # vendored libgit2 wasn't correctly building (couldn't find the
+                # vendored libssh2), so let's just have spack build it
                 'LIBSSH2_SYS_USE_PKG_CONFIG': '1',
                 'LIBGIT2_SYS_USE_PKG_CONFIG': '1'
             })

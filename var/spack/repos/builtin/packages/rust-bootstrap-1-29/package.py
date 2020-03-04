@@ -46,7 +46,8 @@ class RustBootstrap129(Package):
             'OVERRIDE_DIR=%s' % join_path(spec['mrustc'].prefix, 'script-overrides/stable-1.29.0-linux/'),
             'output/cargo',
             extra_env = {
-                # libgit2 wasn't correctly
+                # vendored libgit2 wasn't correctly building (couldn't find the
+                # vendored libssh2), so let's just have spack build it
                 'LIBSSH2_SYS_USE_PKG_CONFIG': '1',
                 'LIBGIT2_SYS_USE_PKG_CONFIG': '1'
             }
