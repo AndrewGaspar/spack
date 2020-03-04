@@ -97,15 +97,30 @@ class RustBinary(Package):
 
     for ver, hash in releases:
         version(ver, sha256=hash)
+        current_ver = Version(ver)
+        next_minor_ver = \
+            Version('{}.{}'.format(current_ver[0], current_ver[1] + 1))
         # rust-lang provides a specific version of the _language_. New versions
         # of the compiler can provide old versions of the language. E.g., rust
         # version 1.41.0 provides support for every version of the language up
         # through 1.41.
         #
         # We assume minor versions don't introduce language changes.
-        provides('rust-lang@:%s' % Version(ver).up_to(2), when="@%s" % ver)
+        provides(
+            'rust-lang@:{}'.format(current_ver.up_to(2)),
+            when="@{}".format(ver))
         # rust-compiler provides a specific version of the _compiler_.
-        provides('rust-compiler@%s' % ver, when="@%s" % ver)
+        provides('rust-compiler@{}'.format(ver), when="@{}".format(ver))
+        # rust-binary can bootstrap itself and 1 minor version newer. It's
+        # possible there's a more expansive matrix here, but somebody else will
+        # need to figure out what that matrix is
+        provides(
+            'rust-can-bootstrap-{}'.format(next_minor_ver.up_to(2).dashed),
+            when="@{}".format(ver))
+        provides(
+            'rust-can-bootstrap-{}'.format(current_ver.up_to(2).dashed),
+            when="@{}".format(ver))
+
         depends_on('rust-binary-x86-64-unknown-linux-gnu@%s' % ver, when='@%s platform=linux target=x86_64:' % ver, type='build')
         depends_on('rust-binary-x86-64-unknown-linux-gnu@%s' % ver, when='@%s platform=cray target=x86_64:' % ver, type='build')
         depends_on('rust-binary-powerpc64le-unknown-linux-gnu@%s' % ver, when='@%s platform=linux target=ppc64le:' % ver, type='build')
