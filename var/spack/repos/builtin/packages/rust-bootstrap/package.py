@@ -102,15 +102,18 @@ rustc = "{rustc}"
 docs = false
 vendor = true
 extended = true
+verbose = 2
 
 [rust]
 channel = "stable"
+rpath = true
 
 [target.x86_64-unknown-linux-gnu]
 ar = "{ar}"
 
 [install]
 prefix = "{prefix}"
+sysconfdir = "etc"
 """.format(
     cargo=boot_bin.cargo,
     rustc=boot_bin.rustc,
