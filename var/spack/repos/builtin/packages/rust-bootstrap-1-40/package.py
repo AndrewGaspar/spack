@@ -13,5 +13,5 @@ class RustBootstrap140(RustBootstrapPackage):
 
     version('1.40.0', sha256='dd97005578defc10a482bff3e4e728350d2099c60ffcf1f5e189540c39a549ad')
 
-    depends_on('rust-can-bootstrap-1-40')
+    depends_on('rust-can-bootstrap-1-40', type='build')
     provides('rust-can-bootstrap-1-41')

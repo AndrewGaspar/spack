@@ -94,7 +94,7 @@ class RustBootstrap(Package):
         # the rust-bootstrap-* packages, which each are unique packages
         # allowing a continuous bootstrap from a first mrustc or rust-binary
         # source to your target version
-        depends_on('rust-can-bootstrap-{}'.format(current_ver.up_to(2).dashed), when='@{}'.format(ver))
+        depends_on('rust-can-bootstrap-{}'.format(current_ver.up_to(2).dashed), when='@{}'.format(ver), type='build')
 
     depends_on('cmake', type='build')
     depends_on('binutils', type='build')
