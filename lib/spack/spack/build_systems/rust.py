@@ -60,6 +60,10 @@ class RustBootstrapPackage(PackageBase):
     supporting "off ramps" to mrustc.
     """
 
+    # All RustBootstrapPackage packages have the same homepage and URL.
+    homepage = "https://www.rust-lang.org/"
+    url      = "https://static.rust-lang.org/dist/rustc-1.41.0-src.tar.gz"
+
     phases = ['configure', 'build', 'install']
 
     #: This attribute is used in UI queries that need to know the build
