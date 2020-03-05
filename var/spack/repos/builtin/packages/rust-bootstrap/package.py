@@ -6,8 +6,19 @@
 from spack import *
 
 
-class RustBootstrap(Package):
-    """Bootstrap the Rust compiler"""
+class RustBootstrap(RustBootstrapPackage):
+    """This package can bootstrap any version of the Rust compiler.
+    
+    Unlike the versioned rust-bootstrap packages (rust-bootstrap-1-*), this
+    package does not provide the ability to bootstrap other versions of Rust.
+    This is because it is not currently possible to have a package depend
+    on itself in Rust. Therefore, you need a distinct package for each
+    stage of the bootstrap, which is why the versioned packages exist.
+    
+    If you want to install a bootstrapped version of Rust, then you should 
+    install this package, and then specify the package dependency tree as
+    necessary.
+    """
 
     homepage = "https://www.rust-lang.org/"
     url      = "https://static.rust-lang.org/dist/rustc-1.41.0-src.tar.gz"
@@ -95,70 +106,3 @@ class RustBootstrap(Package):
         # allowing a continuous bootstrap from a first mrustc or rust-binary
         # source to your target version
         depends_on('rust-can-bootstrap-{}'.format(current_ver.up_to(2).dashed), when='@{}'.format(ver), type='build')
-
-    depends_on('cmake', type='build')
-    depends_on('binutils', type='build')
-    depends_on('python@:2.8', type='build')
-    depends_on('openssl')
-    depends_on('libssh2')
-    depends_on('libgit2')
-
-    def configure(self, spec, prefix):
-        if self.spec.satisfies('platform=linux target=x86_64:') or \
-           self.spec.satisfies('platform=cray target=x86_64:'):
-            target = 'x86-64-unknown-linux-gnu'
-        elif self.spec.satisfies('platform=linux target=ppc64le:'):
-            target = 'powerpc64le-unknown-linux-gnu'
-        elif self.spec.satisfies('platform=darwin target=x86_64:'):
-            target = 'x86-64-apple-darwin'
-        else:
-            raise InstallError(
-                "rust-binary is not supported for '%s'"
-                % self.spec.architecture)
-
-        boot_bin = \
-            spec[
-                'rust-can-bootstrap-{}'.format(self.spec.version.up_to(2).dashed)
-            ].prefix.bin
-
-        with open('config.toml', 'w') as out_file:
-            out_file.write("""\
-[build]
-cargo = "{cargo}"
-rustc = "{rustc}"
-docs = false
-vendor = true
-extended = true
-verbose = 2
-
-[rust]
-channel = "stable"
-rpath = true
-
-[target.{target}]
-ar = "{ar}"
-
-[install]
-prefix = "{prefix}"
-sysconfdir = "etc"
-""".format(
-    cargo=boot_bin.cargo,
-    rustc=boot_bin.rustc,
-    prefix=prefix,
-    target=target,
-    ar=spec['binutils'].prefix.bin.ar))
-
-    def build(self, spec, prefix):
-        x_py = Executable('./x.py')
-        x_py(
-            'build',
-            extra_env={
-                # vendored libgit2 wasn't correctly building (couldn't find the
-                # vendored libssh2), so let's just have spack build it
-                'LIBSSH2_SYS_USE_PKG_CONFIG': '1',
-                'LIBGIT2_SYS_USE_PKG_CONFIG': '1'
-            })
-
-    def install(self, spec, prefix):
-        x_py = Executable('./x.py')
-        x_py('install')
