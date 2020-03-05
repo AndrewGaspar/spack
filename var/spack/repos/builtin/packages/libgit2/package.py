@@ -85,4 +85,8 @@ class Libgit2(CMakePackage):
             args.append(
                 '-DCURL={}'.format('ON' if '+curl' in self.spec else 'OFF'))
 
+        # Control tests
+        args.append(
+            '-DBUILD_CLAR={}'.format('ON' if self.run_tests else 'OFF'))
+
         return args
