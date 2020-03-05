@@ -79,6 +79,18 @@ class RustBootstrapPackage(PackageBase):
 
 
     def configure(self, spec, prefix):
+        if self.spec.satisfies('platform=linux target=x86_64:') or \
+           self.spec.satisfies('platform=cray target=x86_64:'):
+            target = 'x86-64-unknown-linux-gnu'
+        elif self.spec.satisfies('platform=linux target=ppc64le:'):
+            target = 'powerpc64le-unknown-linux-gnu'
+        elif self.spec.satisfies('platform=darwin target=x86_64:'):
+            target = 'x86-64-apple-darwin'
+        else:
+            raise InstallError(
+                "rust-binary is not supported for '%s'"
+                % self.spec.architecture)
+
         boot_bin = \
             spec[
                 'rust-can-bootstrap-{}'.format(self.spec.version.up_to(2).dashed)
@@ -98,7 +110,7 @@ verbose = 2
 channel = "stable"
 rpath = true
 
-[target.x86_64-unknown-linux-gnu]
+[target.{target}]
 ar = "{ar}"
 
 [install]
@@ -108,6 +120,7 @@ sysconfdir = "etc"
     cargo=boot_bin.cargo,
     rustc=boot_bin.rustc,
     prefix=prefix,
+    target=target,
     ar=spec['binutils'].prefix.bin.ar))
 
     def build(self, spec, prefix):
