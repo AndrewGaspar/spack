@@ -43,7 +43,7 @@ packages:
       rust-lang: [rust-bootstrap, rust-binary]
       # Prefer building from a binary source unless otherwise specified
       rust-can-bootstrap-1-41: [rust-binary, rust-bootstrap-1-40]
-      rust-can-bootstrap-1-40: [rust-binary, rust-bootstrap-1-49]
+      rust-can-bootstrap-1-40: [rust-binary, rust-bootstrap-1-39]
       rust-can-bootstrap-1-39: [rust-binary, rust-bootstrap-1-38]
       rust-can-bootstrap-1-38: [rust-binary, rust-bootstrap-1-37]
       rust-can-bootstrap-1-37: [rust-binary, rust-bootstrap-1-36]
