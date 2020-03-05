@@ -81,11 +81,11 @@ class RustBootstrapPackage(PackageBase):
     def configure(self, spec, prefix):
         if self.spec.satisfies('platform=linux target=x86_64:') or \
            self.spec.satisfies('platform=cray target=x86_64:'):
-            target = 'x86-64-unknown-linux-gnu'
+            target = 'x86_64-unknown-linux-gnu'
         elif self.spec.satisfies('platform=linux target=ppc64le:'):
             target = 'powerpc64le-unknown-linux-gnu'
         elif self.spec.satisfies('platform=darwin target=x86_64:'):
-            target = 'x86-64-apple-darwin'
+            target = 'x86_64-apple-darwin'
         else:
             raise InstallError(
                 "rust-binary is not supported for '%s'"
