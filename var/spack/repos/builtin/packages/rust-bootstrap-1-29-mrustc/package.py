@@ -24,8 +24,6 @@ class RustBootstrap129Mrustc(Package):
         placement='rustc-1.29.0-src'
     )
 
-    version('1.29.2', sha256='5088e796aa2e47478cdf41e7243fc5443fafab0a7c70a11423e57c80c04167c9')
-
     def install(self, spec, prefix):
         ()
 
