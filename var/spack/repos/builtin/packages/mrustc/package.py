@@ -36,4 +36,5 @@ class Mrustc(Package):
 
         install_tree('script-overrides', join_path(prefix, 'script-overrides'))
         install_tree('lib', prefix.lib)
+        install_tree('run_rustc', prefix.run_rustc)
         install('rustc-1.29.0-src.patch', prefix)

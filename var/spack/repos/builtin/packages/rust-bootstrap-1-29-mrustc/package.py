@@ -3,11 +3,12 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
+import os
 from spack import *
 
 
-class RustBootstrap129(Package):
-    "Builds Rust 1.29"
+class RustBootstrap129Mrustc(Package):
+    "Builds Rust 1.29 Using MRustc"
 
     homepage = "https://www.rust-lang.org/"
     url      = "https://static.rust-lang.org/dist/rustc-1.29.2-src.tar.gz"
@@ -23,6 +24,8 @@ class RustBootstrap129(Package):
     depends_on('openssl')
     depends_on('libssh2')
     depends_on('libgit2')
+
+    provides('rust-can-bootstrap-1-30')
 
     def install(self, spec, prefix):
         # Emplace the lib/librustc_macro re-implementation from mrustc
@@ -47,6 +50,7 @@ class RustBootstrap129(Package):
             % join_path(
                 spec['mrustc'].prefix,
                 'script-overrides/stable-1.29.0-linux/'),
+            'output/rustc',
             'output/cargo',
             extra_env={
                 # vendored libgit2 wasn't correctly building (couldn't find the
@@ -56,23 +60,24 @@ class RustBootstrap129(Package):
             }
         )
 
-        make(
-            '-f', join_path(spec['mrustc'].prefix.share, 'minicargo.mk'),
-            'RUSTCSRC=./',
-            'RUSTC_VERSION=1.29.0',
-            'MRUSTC=%s' % join_path(spec['mrustc'].prefix.bin, 'mrustc'),
-            'MINICARGO=%s'
-            % join_path(spec['mrustc'].prefix.tools.bin, 'minicargo'),
-            'OVERRIDE_DIR=%s'
-            % join_path(
-                spec['mrustc'].prefix,
-                'script-overrides/stable-1.29.0-linux/'),
-            'output/rustc',
-            'output/cargo'
-        )
+        install_tree(spec['mrustc'].prefix.run_rustc, 'run_rustc')
 
-        # FIXME: This needs to self-bootstrap to a Rust 1.29 compiler built
-        # with 1.29
-        mkdirp(prefix.bin)
-        install('output/rustc', prefix.bin)
-        install('output/cargo', prefix.bin)
+        # pushd
+        cwd = os.getcwd()
+        os.chdir('run_rustc')
+
+        try:
+            make(
+                'RUST_SRC=..',
+                'RUSTC_VERSION=1.29.0',
+                'PREFIX={}'.format(prefix),
+                extra_env={
+                    # vendored libgit2 wasn't correctly building (couldn't find
+                    # the vendored libssh2), so let's just have spack build it
+                    'LIBSSH2_SYS_USE_PKG_CONFIG': '1',
+                    'LIBGIT2_SYS_USE_PKG_CONFIG': '1'
+                }
+            )
+        finally:
+            #popd
+            os.chdir(cwd)
