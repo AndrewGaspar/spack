@@ -5,7 +5,7 @@
 
 from spack.directives import *
 from spack.package import PackageBase
-from spack.util.executable import Executable
+from spack.util.executable import Executable, which
 
 
 class RustBinaryPackage(PackageBase):
@@ -76,7 +76,10 @@ class RustBootstrapPackage(PackageBase):
     final_bootstrap = False
 
     depends_on('cmake', type='build')
-    depends_on('binutils', type='build')
+    # We don't use binutils on Mac - we pick up ar either from the system or 
+    # compiler
+    depends_on('binutils', type='build', when='platform=linux')
+    depends_on('binutils', type='build', when='platform=cray')
     depends_on('python@:2.8', type='build')
     depends_on('openssl')
     depends_on('libssh2')
@@ -116,6 +119,8 @@ class RustBootstrapPackage(PackageBase):
             if '+src' in self.spec:
                 tools.append('src')
 
+        ar = which('ar')
+
         with open('config.toml', 'w') as out_file:
             out_file.write("""\
 [build]
@@ -142,7 +147,7 @@ sysconfdir = "etc"
     rustc=boot_bin.rustc,
     prefix=prefix,
     target=target,
-    ar=spec['binutils'].prefix.bin.ar,
+    ar=ar.path,
     tools=tools))
 
     def build(self, spec, prefix):
