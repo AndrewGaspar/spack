@@ -25,17 +25,45 @@ class RustBootstrap(RustBootstrapPackage):
 
     maintainers = ['AndrewGaspar']
 
-    phases = ['configure', 'build', 'install']
-
-    variant(
-        'mrustc',
-        default=False, description='Prefer bootstrapping from mrustc')
-
     # indicates that this is the ultimate target of a Rust bootstrapping build
     # Therfore, the Rust compiler should rebuild itself from source in order
     # to take advantage of performance optimizations present in the latest Rust
     # compiler.
     final_bootstrap = True
+
+    variant(
+        'mrustc',
+        default=False, description='Prefer bootstrapping from mrustc')
+
+    variant(
+        'rustfmt',
+        default=True,
+        description='Formatting tool for Rust code'
+    )
+
+    variant(
+        'analysis',
+        default=True,
+        description='Outputs code analysis that can be consumed by other tools.'
+    )
+
+    variant(
+        'clippy',
+        default=True,
+        description='Linting tool for Rust'
+    )
+
+    variant(
+        'rls',
+        default=False,
+        description='The Rust Language Server can be used for IDE integration'
+    )
+
+    variant(
+        'src',
+        default=True,
+        description='Install Rust source files'
+    )
 
     releases = [
         ('1.41.1', '38c93d016e6d3e083aa15e8f65511d3b4983072c0218a529f5ee94dd1de84573'),
@@ -117,7 +145,10 @@ class RustBootstrap(RustBootstrapPackage):
         # the rust-bootstrap-* packages, which each are unique packages
         # allowing a continuous bootstrap from a first mrustc or rust-binary
         # source to your target version
-        depends_on('rust-can-bootstrap-{}'.format(current_ver.up_to(2).dashed), when='@{}'.format(ver), type='build')
+        depends_on(
+            'rust-can-bootstrap-{}'.format(current_ver.up_to(2).dashed),
+            when='@{}'.format(ver),
+            type='build')
 
         if current_ver >= Version('1.31'):
             depends_on(

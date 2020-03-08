@@ -101,6 +101,21 @@ class RustBootstrapPackage(PackageBase):
                 'rust-can-bootstrap-{}'.format(self.spec.version.up_to(2).dashed)
             ].prefix.bin
 
+        # Always build rustc and cargo
+        tools = ['rustc', 'cargo']
+        if self.final_bootstrap:
+            # Only make additional components available in 'rust-bootstrap'
+            if '+rustfmt' in self.spec:
+                tools.append('rustfmt')
+            if '+analysis' in self.spec:
+                tools.append('analysis')
+            if '@1.33: +clippy' in self.spec:
+                tools.append('clippy')
+            if '+rls' in self.spec:
+                tools.append('rls')
+            if '+src' in self.spec:
+                tools.append('src')
+
         with open('config.toml', 'w') as out_file:
             out_file.write("""\
 [build]
@@ -110,7 +125,7 @@ docs = false
 vendor = true
 extended = true
 verbose = 2
-local-rebuild = {local_rebuild}
+tools = {tools}
 
 [rust]
 channel = "stable"
@@ -128,7 +143,7 @@ sysconfdir = "etc"
     prefix=prefix,
     target=target,
     ar=spec['binutils'].prefix.bin.ar,
-    local_rebuild='true' if self.final_bootstrap else 'false'))
+    tools=tools))
 
     def build(self, spec, prefix):
         x_py = Executable('./x.py')
