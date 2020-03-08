@@ -27,6 +27,16 @@ class RustBootstrap(RustBootstrapPackage):
 
     phases = ['configure', 'build', 'install']
 
+    variant(
+        'mrustc',
+        default=False, description='Prefer bootstrapping from mrustc')
+
+    # indicates that this is the ultimate target of a Rust bootstrapping build
+    # Therfore, the Rust compiler should rebuild itself from source in order
+    # to take advantage of performance optimizations present in the latest Rust
+    # compiler.
+    final_bootstrap = True
+
     releases = [
         ('1.41.1', '38c93d016e6d3e083aa15e8f65511d3b4983072c0218a529f5ee94dd1de84573'),
         ('1.41.0', '5546822c09944c4d847968e9b7b3d0e299f143f307c00fa40e84a99fabf8d74b'),
@@ -89,6 +99,8 @@ class RustBootstrap(RustBootstrapPackage):
     for ver, hash in releases:
         version(ver, sha256=hash)
         current_ver = Version(ver)
+        prev_minor_ver = \
+            Version('{}.{}'.format(current_ver[0], current_ver[1] - 1))
         # rust-lang provides a specific version of the _language_. New versions
         # of the compiler can provide old versions of the language. E.g., rust
         # version 1.41.0 provides support for every version of the language up
@@ -106,3 +118,10 @@ class RustBootstrap(RustBootstrapPackage):
         # allowing a continuous bootstrap from a first mrustc or rust-binary
         # source to your target version
         depends_on('rust-can-bootstrap-{}'.format(current_ver.up_to(2).dashed), when='@{}'.format(ver), type='build')
+
+        if current_ver >= Version('1.31'):
+            depends_on(
+                'rust-bootstrap-{} +mrustc'\
+                    .format(prev_minor_ver.up_to(2).dashed),
+                when='+mrustc',
+                type='build')

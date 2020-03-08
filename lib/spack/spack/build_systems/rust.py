@@ -70,6 +70,11 @@ class RustBootstrapPackage(PackageBase):
     #: system base class
     build_system_class = 'RustBootstrapPackage'
 
+    # indicates if this is a terminal package in the Rust bootstrap process.
+    # Practically, rust-bootstrap is final_bootstrap, but rust-bootstrap-* are
+    # not.
+    final_bootstrap = False
+
     depends_on('cmake', type='build')
     depends_on('binutils', type='build')
     depends_on('python@:2.8', type='build')
@@ -105,6 +110,7 @@ docs = false
 vendor = true
 extended = true
 verbose = 2
+local-rebuild = {local_rebuild}
 
 [rust]
 channel = "stable"
@@ -121,7 +127,8 @@ sysconfdir = "etc"
     rustc=boot_bin.rustc,
     prefix=prefix,
     target=target,
-    ar=spec['binutils'].prefix.bin.ar))
+    ar=spec['binutils'].prefix.bin.ar,
+    local_rebuild='true' if self.final_bootstrap else 'false'))
 
     def build(self, spec, prefix):
         x_py = Executable('./x.py')

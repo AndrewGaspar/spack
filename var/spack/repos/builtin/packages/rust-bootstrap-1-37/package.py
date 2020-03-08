@@ -15,3 +15,8 @@ class RustBootstrap137(RustBootstrapPackage):
 
     depends_on('rust-can-bootstrap-1-37', type='build')
     provides('rust-can-bootstrap-1-38')
+
+    variant(
+        'mrustc',
+        default=False, description='Prefer bootstrapping from mrustc')
+    depends_on('rust-bootstrap-1-36 +mrustc', type='build', when='+mrustc')
