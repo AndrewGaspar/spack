@@ -16,7 +16,7 @@ class RustBootstrap129Mrustc(Package):
 
     maintainers = ['AndrewGaspar']
 
-    version('0.9',   sha256='381ded90498a04a667ab67a33c1bf7ff1269026bd45a6bde9bac8bf694929de6')
+    version('0.9', sha256='381ded90498a04a667ab67a33c1bf7ff1269026bd45a6bde9bac8bf694929de6')
 
     resource(
         name='rustc-1.29.0-src',
