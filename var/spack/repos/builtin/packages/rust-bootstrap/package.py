@@ -8,14 +8,14 @@ from spack import *
 
 class RustBootstrap(RustBootstrapPackage):
     """This package can bootstrap any version of the Rust compiler.
-    
+
     Unlike the versioned rust-bootstrap packages (rust-bootstrap-1-*), this
     package does not provide the ability to bootstrap other versions of Rust.
     This is because it is not currently possible to have a package depend
-    on itself in Rust. Therefore, you need a distinct package for each
+    on itself in Spack. Therefore, you need a distinct package for each
     stage of the bootstrap, which is why the versioned packages exist.
-    
-    If you want to install a bootstrapped version of Rust, then you should 
+
+    If you want to install a bootstrapped version of Rust, then you should
     install this package, and then specify the package dependency tree as
     necessary.
     """
@@ -44,7 +44,7 @@ class RustBootstrap(RustBootstrapPackage):
     variant(
         'analysis',
         default=True,
-        description='Outputs code analysis that can be consumed by other tools.'
+        description='Outputs code analysis that can be consumed by other tools'
     )
 
     variant(
@@ -152,7 +152,7 @@ class RustBootstrap(RustBootstrapPackage):
 
         if current_ver >= Version('1.31'):
             depends_on(
-                'rust-bootstrap-{} +mrustc'\
-                    .format(prev_minor_ver.up_to(2).dashed),
+                'rust-bootstrap-{} +mrustc'
+                .format(prev_minor_ver.up_to(2).dashed),
                 when='+mrustc',
                 type='build')

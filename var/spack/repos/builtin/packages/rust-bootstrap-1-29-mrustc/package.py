@@ -3,7 +3,6 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-import os
 from shutil import copyfile
 
 from spack import *
@@ -62,7 +61,8 @@ class RustBootstrap129Mrustc(Package):
             '-C', 'run_rustc',
             'output/prefix/bin/rustc',
             'output/prefix/bin/cargo',
-            'output/prefix/lib/rustlib/x86_64-unknown-linux-gnu/lib/libstd.rlib',
+            'output/prefix/lib/rustlib/x86_64-unknown-linux-gnu/lib/'
+            'libstd.rlib',
             extra_env={
                 # vendored libgit2 wasn't correctly building (couldn't find
                 # the vendored libssh2), so let's just have spack build it
@@ -70,7 +70,7 @@ class RustBootstrap129Mrustc(Package):
                 'LIBGIT2_SYS_USE_PKG_CONFIG': '1'
             }
         )
-        
+
         install_tree('run_rustc/output/prefix', prefix)
         copyfile(prefix.bin.rustc_binary, prefix.bin.rustc)
 
