@@ -119,7 +119,7 @@ class RustBootstrapPackage(PackageBase):
             if '+src' in self.spec:
                 tools.append('src')
 
-        ar = which('ar')
+        ar = which('ar', required=True)
 
         with open('config.toml', 'w') as out_file:
             out_file.write("""\
