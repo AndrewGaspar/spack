@@ -26,9 +26,6 @@ class RustBootstrap(RustBootstrapPackage):
     maintainers = ['AndrewGaspar']
 
     # indicates that this is the ultimate target of a Rust bootstrapping build
-    # Therfore, the Rust compiler should rebuild itself from source in order
-    # to take advantage of performance optimizations present in the latest Rust
-    # compiler.
     final_bootstrap = True
 
     variant(
