@@ -35,7 +35,6 @@ class RustBootstrap129Mrustc(Package):
     provides('rust-can-bootstrap-1-30')
 
     def patch(self):
-        # raise InstallError('cwd: ' + os.getcwd())
         # Apply the source patch
         patch = which("patch", required=True)
         patch(
