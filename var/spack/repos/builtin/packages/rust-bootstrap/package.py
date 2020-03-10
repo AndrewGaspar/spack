@@ -141,11 +141,23 @@ class RustBootstrap(RustBootstrapPackage):
         # it would result in possible recursive dependencies. You must use
         # the rust-bootstrap-* packages, which each are unique packages
         # allowing a continuous bootstrap from a first mrustc or rust-binary
-        # source to your target version
-        depends_on(
-            'rust-can-bootstrap-{0}'.format(current_ver.up_to(2).dashed),
-            when='@{0}'.format(ver),
-            type='build')
+        # source to your target version.
+        #
+        # Currently we do not support bootstrapping from a bootstrapped version
+        # of Rust prior to 1.29 since it's not an interesting scenario - if
+        # you ultimately want to build from the binary distribution of Rust,
+        # then just use a more recent one. Instead, we just depend directly on
+        # rust-binary
+        if current_ver >= Version('1.30'):
+            depends_on(
+                'rust-can-bootstrap-{0}'.format(current_ver.up_to(2).dashed),
+                when='@{0}'.format(ver),
+                type='build')
+        else:
+            depends_on(
+                'rust-binary@{0}'.format(ver),
+                when='@{0}'.format(ver),
+                type='build')
 
         if current_ver >= Version('1.31'):
             depends_on(

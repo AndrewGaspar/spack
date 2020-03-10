@@ -99,11 +99,16 @@ class RustBootstrapPackage(PackageBase):
                 "rust-binary is not supported for '%s'"
                 % self.spec.architecture)
 
-        boot_bin = \
-            spec[
-                'rust-can-bootstrap-{0}'.format(
-                    self.spec.version.up_to(2).dashed)
-            ].prefix.bin
+        # For versions of Rust prior to 1.30, we only support bootstrapping
+        # directly from rust-binary.
+        if '@1.30:' in self.spec:
+            boot_bin = \
+                spec[
+                    'rust-can-bootstrap-{0}'.format(
+                        self.spec.version.up_to(2).dashed)
+                ].prefix.bin
+        else:
+            boot_bin = spec['rust-binary'].prefix.bin
 
         # Always build rustc and cargo
         tools = ['rustc', 'cargo']

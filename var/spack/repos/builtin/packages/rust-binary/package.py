@@ -114,12 +114,20 @@ class RustBinary(Package):
         # rust-binary can bootstrap itself and 1 minor version newer. It's
         # possible there's a more expansive matrix here, but somebody else will
         # need to figure out what that matrix is
-        provides(
-            'rust-can-bootstrap-{0}'.format(next_minor_ver.up_to(2).dashed),
-            when="@{0}".format(ver))
-        provides(
-            'rust-can-bootstrap-{0}'.format(current_ver.up_to(2).dashed),
-            when="@{0}".format(ver))
+        #
+        # Currently we do not provide virtual packages prior to 1.29 since the
+        # value seems lower to support multi-stage bootstrap. Would possibly
+        # add this back if self-dependent build packages were supported.
+        if next_minor_ver >= Version('1.30'):
+            provides(
+                'rust-can-bootstrap-{0}'.format(
+                    next_minor_ver.up_to(2).dashed),
+                when="@{0}".format(ver))
+
+        if current_ver >= Version('1.30'):
+            provides(
+                'rust-can-bootstrap-{0}'.format(current_ver.up_to(2).dashed),
+                when="@{0}".format(ver))
 
         depends_on('rust-binary-x86-64-unknown-linux-gnu@%s' % ver, when='@%s platform=linux target=x86_64:' % ver, type='build')
         depends_on('rust-binary-x86-64-unknown-linux-gnu@%s' % ver, when='@%s platform=cray target=x86_64:' % ver, type='build')
