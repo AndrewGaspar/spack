@@ -110,7 +110,7 @@ class RustBinary(Package):
             'rust-lang@:{0}'.format(current_ver.up_to(2)),
             when="@{0}".format(ver))
         # rust-compiler provides a specific version of the _compiler_.
-        provides('rust-compiler@{0}'.format(ver), when="@{}".format(ver))
+        provides('rust-compiler@{0}'.format(ver), when="@{0}".format(ver))
         # rust-binary can bootstrap itself and 1 minor version newer. It's
         # possible there's a more expansive matrix here, but somebody else will
         # need to figure out what that matrix is
