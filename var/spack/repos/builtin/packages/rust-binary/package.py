@@ -96,7 +96,7 @@ class RustBinary(Package):
     ]
 
     for ver, hash in releases:
-        version(ver, sha256=hash)
+        version(ver, sha256=hash, expand=False)
         current_ver = Version(ver)
         next_minor_ver = \
             Version('{0}.{1}'.format(current_ver[0], current_ver[1] + 1))
