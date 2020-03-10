@@ -3,9 +3,10 @@
 #
 # SPDX-License-Identifier: (Apache-2.0 OR MIT)
 
-from spack.directives import *
+from spack.directives import depends_on
 from spack.package import PackageBase
 from spack.util.executable import Executable, which
+from spack.installer import InstallError
 
 
 class RustBinaryPackage(PackageBase):
@@ -76,7 +77,7 @@ class RustBootstrapPackage(PackageBase):
     final_bootstrap = False
 
     depends_on('cmake', type='build')
-    # We don't use binutils on Mac - we pick up ar either from the system or 
+    # We don't use binutils on Mac - we pick up ar either from the system or
     # compiler
     depends_on('binutils', type='build', when='platform=linux')
     depends_on('binutils', type='build', when='platform=cray')
@@ -84,7 +85,6 @@ class RustBootstrapPackage(PackageBase):
     depends_on('openssl')
     depends_on('libssh2')
     depends_on('libgit2')
-
 
     def configure(self, spec, prefix):
         if self.spec.satisfies('platform=linux target=x86_64:') or \
@@ -101,7 +101,8 @@ class RustBootstrapPackage(PackageBase):
 
         boot_bin = \
             spec[
-                'rust-can-bootstrap-{0}'.format(self.spec.version.up_to(2).dashed)
+                'rust-can-bootstrap-{0}'.format(
+                    self.spec.version.up_to(2).dashed)
             ].prefix.bin
 
         # Always build rustc and cargo
@@ -143,12 +144,14 @@ ar = "{ar}"
 prefix = "{prefix}"
 sysconfdir = "etc"
 """.format(
-    cargo=boot_bin.cargo,
-    rustc=boot_bin.rustc,
-    prefix=prefix,
-    target=target,
-    ar=ar.path,
-    tools=tools))
+                cargo=boot_bin.cargo,
+                rustc=boot_bin.rustc,
+                prefix=prefix,
+                target=target,
+                ar=ar.path,
+                tools=tools
+            )
+            )
 
     def build(self, spec, prefix):
         x_py = Executable('./x.py')
@@ -164,4 +167,3 @@ sysconfdir = "etc"
     def install(self, spec, prefix):
         x_py = Executable('./x.py')
         x_py('install')
-
