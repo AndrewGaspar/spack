@@ -101,7 +101,7 @@ class RustBootstrapPackage(PackageBase):
 
         boot_bin = \
             spec[
-                'rust-can-bootstrap-{}'.format(self.spec.version.up_to(2).dashed)
+                'rust-can-bootstrap-{0}'.format(self.spec.version.up_to(2).dashed)
             ].prefix.bin
 
         # Always build rustc and cargo
