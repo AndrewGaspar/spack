@@ -78,15 +78,15 @@ class Libgit2(CMakePackage):
             args.append('-DUSE_HTTPS=OFF')
 
         args.append(
-            '-DUSE_SSH={}'.format('ON' if '+ssh' in self.spec else 'OFF'))
+            '-DUSE_SSH={0}'.format('ON' if '+ssh' in self.spec else 'OFF'))
 
         # The curl backed is not supported after 0.27.x
         if '@:0.27 +curl' in self.spec:
             args.append(
-                '-DCURL={}'.format('ON' if '+curl' in self.spec else 'OFF'))
+                '-DCURL={0}'.format('ON' if '+curl' in self.spec else 'OFF'))
 
         # Control tests
         args.append(
-            '-DBUILD_CLAR={}'.format('ON' if self.run_tests else 'OFF'))
+            '-DBUILD_CLAR={0}'.format('ON' if self.run_tests else 'OFF'))
 
         return args

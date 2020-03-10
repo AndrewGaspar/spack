@@ -125,7 +125,7 @@ class RustBootstrap(RustBootstrapPackage):
         version(ver, sha256=hash)
         current_ver = Version(ver)
         prev_minor_ver = \
-            Version('{}.{}'.format(current_ver[0], current_ver[1] - 1))
+            Version('{0}.{1}'.format(current_ver[0], current_ver[1] - 1))
         # rust-lang provides a specific version of the _language_. New versions
         # of the compiler can provide old versions of the language. E.g., rust
         # version 1.41.0 provides support for every version of the language up
@@ -133,23 +133,23 @@ class RustBootstrap(RustBootstrapPackage):
         #
         # We assume minor versions don't introduce language changes.
         provides(
-            'rust-lang@:{}'.format(current_ver.up_to(2)),
-            when="@{}".format(ver))
+            'rust-lang@:{0}'.format(current_ver.up_to(2)),
+            when="@{0}".format(ver))
         # rust-compiler provides a specific version of the _compiler_.
-        provides('rust-compiler@{}'.format(ver), when="@{}".format(ver))
+        provides('rust-compiler@{0}'.format(ver), when="@{0}".format(ver))
         # rust-bootstrap does not itself provide the ability to bootstrap since
         # it would result in possible recursive dependencies. You must use
         # the rust-bootstrap-* packages, which each are unique packages
         # allowing a continuous bootstrap from a first mrustc or rust-binary
         # source to your target version
         depends_on(
-            'rust-can-bootstrap-{}'.format(current_ver.up_to(2).dashed),
-            when='@{}'.format(ver),
+            'rust-can-bootstrap-{0}'.format(current_ver.up_to(2).dashed),
+            when='@{0}'.format(ver),
             type='build')
 
         if current_ver >= Version('1.31'):
             depends_on(
-                'rust-bootstrap-{} +mrustc'
+                'rust-bootstrap-{0} +mrustc'
                 .format(prev_minor_ver.up_to(2).dashed),
                 when='+mrustc',
                 type='build')
