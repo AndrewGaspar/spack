@@ -42,6 +42,7 @@ packages:
       rust-compiler: [rust-bootstrap, rust-binary]
       rust-lang: [rust-bootstrap, rust-binary]
       # Prefer building from a binary source unless otherwise specified
+      rust-can-bootstrap-1-42: [rust-binary, rust-bootstrap-1-41]
       rust-can-bootstrap-1-41: [rust-binary, rust-bootstrap-1-40]
       rust-can-bootstrap-1-40: [rust-binary, rust-bootstrap-1-39]
       rust-can-bootstrap-1-39: [rust-binary, rust-bootstrap-1-38]
@@ -53,6 +54,7 @@ packages:
       rust-can-bootstrap-1-33: [rust-binary, rust-bootstrap-1-32]
       rust-can-bootstrap-1-32: [rust-binary, rust-bootstrap-1-31]
       rust-can-bootstrap-1-31: [rust-binary, rust-bootstrap-1-30]
+      rust-can-bootstrap-1-30: [rust-binary, rust-bootstrap-1-29-mrustc]
       scalapack: [netlib-scalapack]
       szip: [libszip, libaec]
       tbb: [intel-tbb]
