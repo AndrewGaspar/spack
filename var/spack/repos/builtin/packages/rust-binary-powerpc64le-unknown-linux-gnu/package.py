@@ -15,6 +15,7 @@ class RustBinaryPowerpc64leUnknownLinuxGnu(RustBinaryPackage):
 
     rust_target_arch = 'powerpc64le-unknown-linux-gnu'
 
+    version('1.42.0', sha256='805b08fa1e0aad4d706301ca1f13e2d80810d385cece2c15070360b3c4bd6e4a')
     version('1.41.1', sha256='f9b53ca636625b3a2dd87600b6274223c11f866c9b5a34b638ea0013186659d3')
     version('1.41.0', sha256='ba231b0d8273d6928f61e2be3456e816a1de8050135e20c0623dc7a6ea03ba68')
     version('1.40.0', sha256='b1a23e35c383f99e647df6a9239b1dc9313e293deb70a76ba58e8ebe55ef623b')

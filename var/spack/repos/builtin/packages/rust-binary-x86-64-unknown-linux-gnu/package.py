@@ -15,6 +15,7 @@ class RustBinaryX8664UnknownLinuxGnu(RustBinaryPackage):
 
     rust_target_arch = 'x86_64-unknown-linux-gnu'
 
+    version('1.42.0', sha256='7d1e07ad9c8a33d8d039def7c0a131c5917aa3ea0af3d0cc399c6faf7b789052')
     version('1.41.1', sha256='a6d5a3b3f574aafc8f787fea37aad9fb8a7946b383ae5348146927192ff0bef0')
     version('1.41.0', sha256='343ba8ef7397eab7b3bb2382e5e4cb08835a87bff5c8074382c0b6930a41948b')
     version('1.40.0', sha256='fc91f8b4bd18314e83a617f2389189fc7959146b7177b773370d62592d4b07d0')

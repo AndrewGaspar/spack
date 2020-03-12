@@ -15,6 +15,7 @@ class RustBinaryX8664AppleDarwin(RustBinaryPackage):
 
     rust_target_arch = 'x86_64-apple-darwin'
 
+    version('1.42.0', sha256='db1055c46e0d54b99da05e88c71fea21b3897e74a4f5ff9390e934f3f050c0a8')
     version('1.41.1', sha256='16615288cf74239783de1b435d329f3d56ed13803c7c10cd4b207d7c8ffa8f67')
     version('1.41.0', sha256='b6504003ab70b11f278e0243a43ba9d6bf75e8ad6819b4058a2b6e3991cc8d7a')
     version('1.40.0', sha256='749ca5e0b94550369cc998416b8854c13157f5d11d35e9b3276064b6766bcb83')

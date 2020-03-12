@@ -63,6 +63,7 @@ class RustBootstrap(RustBootstrapPackage):
     )
 
     releases = [
+        ('1.42.0', 'd2e8f931d16a0539faaaacd801e0d92c58df190269014b2360c6ab2a90ee3475'),
         ('1.41.1', '38c93d016e6d3e083aa15e8f65511d3b4983072c0218a529f5ee94dd1de84573'),
         ('1.41.0', '5546822c09944c4d847968e9b7b3d0e299f143f307c00fa40e84a99fabf8d74b'),
         ('1.40.0', 'dd97005578defc10a482bff3e4e728350d2099c60ffcf1f5e189540c39a549ad'),

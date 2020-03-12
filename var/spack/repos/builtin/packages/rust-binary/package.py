@@ -37,6 +37,7 @@ class RustBinary(Package):
         install_tree(spec[dep].prefix.share, prefix.share)
 
     releases = [
+        ('1.42.0', 'e8a8713a25a9476f482b64fa5036b964bd81f13e61ac3c2e130bdb48b082ded2'),
         ('1.41.1', '68271e5cf4672b2b5d2048c202c6d04f98e24e5d39621696dc39dc1b7a0601bf'),
         ('1.41.0', '77996f7ef910d1c438f3c75cd21ff773b52a4aedaf0dd806f79ef239daf4638c'),
         ('1.40.0', 'c1fe30cb53760165cc1d513c5315355c978dc8eaf0a0bf7356877cfd9358c17d'),
